@@ -1,0 +1,15 @@
+.Home {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    input {
+        margin: 1rem 0;
+        width: 70%;
+        padding: 0.5rem;
+        border-radius: 2px;
+        border: 1px solid grey;
+        outline: none;
+    }
+}
