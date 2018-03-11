@@ -1,0 +1,75 @@
+.CommentList {
+    list-style: none;
+    margin-top: 2rem;
+    margin-left: 0.9rem;
+    margin-right: 2.1rem;
+    padding: 0;
+    padding-bottom: 1.5rem;
+
+    .CommentContainer {
+        padding: 0;
+        margin: 0;
+
+        .CommentInfo {
+            display: flex;
+            .CommentUserAvatar {
+                background-color: #000;
+                color: #fff;
+
+                width: 4rem;
+                height: 4rem;
+                border-radius: 100px;
+            }
+
+            .CommentUserInfo {
+                margin-left: 1.2rem;
+
+                .CommentUserName,
+                .CommentUserPostDate {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .CommentUserName {
+                    color: #1aa6c8;
+                    font-size: 1.4rem;
+                    margin-top: 0.3rem;
+                    margin-bottom: 0.2rem;
+                }
+
+                .CommentUserPostDate {
+                    font-size: 0.7rem;
+                    color: #979696;
+                }
+            }
+        }
+
+        .CommentBody {
+            margin-top: 1.3rem;
+            border-left: 5px solid #e2e2e2;
+            padding-top: 1.2rem;
+            padding-left: 1.2rem;
+            padding-bottom: 1rem;
+
+            .CommentText {
+                margin-bottom: 1.1rem;
+            }
+
+            .CommentActions {
+                &::after {
+                    display: table;
+                    content: "";
+                    clear: both;
+                }
+
+                .CommentActionsSocial {
+                    float: left;
+                }
+
+                .CommentActionsReport {
+                    float: right;
+                }
+            }
+        }
+    }
+}

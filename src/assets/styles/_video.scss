@@ -1,6 +1,13 @@
 @import "./videoButtons";
 @import "./addComment";
+@import "./commentList";
 
 .Video {
-    padding: 2.1rem 2.1rem 1.2rem;
+    .PlayerUIContainer {
+        padding-top: 2.1rem;
+        padding-left: 2.1rem;
+        padding-bottom: 1.5rem;
+        margin-right: 2.1rem;
+        border-bottom: 2px solid #ebebe9;
+    }
 }

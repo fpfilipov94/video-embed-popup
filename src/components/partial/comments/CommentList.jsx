@@ -5,10 +5,8 @@ import Comment from "./Comment";
 class CommentList extends Component {
     render() {
         return (
-            <ul>
-                <li>
-                    <Comment />
-                </li>
+            <ul className="CommentList">
+                <Comment />
             </ul>
         );
     }

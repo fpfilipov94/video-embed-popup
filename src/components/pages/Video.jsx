@@ -9,9 +9,11 @@ export default class Video extends Component {
     render() {
         return (
             <div className="Video">
-                <Player videoId={this.props.match.params.id} />
-                <VideoButtons />
-                <AddComment />
+                <div className="PlayerUIContainer">
+                    <Player videoId={this.props.match.params.id} />
+                    <VideoButtons />
+                    <AddComment />
+                </div>
                 <CommentList />
             </div>
         );
