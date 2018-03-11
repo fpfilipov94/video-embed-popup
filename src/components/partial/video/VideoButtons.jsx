@@ -5,6 +5,10 @@ import ShareIcon from "../icons/ShareIcon";
 
 export default () => (
     <div className="VideoButtons">
+        <div className="VideoActionsButtonGroup">
+            <button className="VideoActionsButtonEdit">EDIT</button>
+            <button className="VideoActionsButtonDelete">DELETE</button>
+        </div>
         <div className="VideoSocialButtonGroup">
             <button className="VideoSocialButtonLike">
                 <LikeIcon />
@@ -14,10 +18,6 @@ export default () => (
                 <ShareIcon />
                 SHARE
             </button>
-        </div>
-        <div className="VideoActionsButtonGroup">
-            <button className="VideoActionsButtonEdit">EDIT</button>
-            <button className="VideoActionsButtonDelete">DELETE</button>
         </div>
     </div>
 );

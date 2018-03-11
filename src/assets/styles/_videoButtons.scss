@@ -1,73 +1,90 @@
 .VideoButtons {
-    margin-top: 1rem;
+    @media screen and (min-width: 320px) {
+        margin-top: 1rem;
 
-    &::after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    button {
-        background: none;
-        margin: 0;
-        padding: 0;
-        border: none;
-        outline: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        font-weight: lighter;
-        cursor: pointer;
-
-        svg {
-            fill: #1aa6c8;
-            margin-right: 0.3rem;
+        &::after {
+            content: "";
+            display: table;
+            clear: both;
         }
-    }
-
-    .VideoSocialButtonGroup,
-    .VideoActionsButtonGroup {
-        display: flex;
-        align-items: center;
-        height: 2rem;
-
-        button:first-of-type {
-            margin-right: 0.8rem;
-        }
-    }
-
-    .VideoSocialButtonGroup {
-        float: left;
-
-        .VideoSocialButtonLike:hover svg {
-            fill: pink;
-        }
-
-        .VideoSocialButtonShare:hover svg {
-            fill: rgb(211, 190, 0);
-        }
-    }
-
-    .VideoActionsButtonGroup {
-        float: right;
 
         button {
-            color: #fff;
-            padding: 0.3rem 1.1rem;
-            border-radius: 3px;
+            background: none;
+            margin: 0;
+            padding: 0;
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: lighter;
+            cursor: pointer;
 
-            &:hover {
-                box-shadow: 0 0 2px 2px #1aa6c8;
+            svg {
+                fill: #1aa6c8;
+                margin-right: 0.3rem;
             }
         }
 
-        .VideoActionsButtonEdit {
-            background-color: #2f2f2f;
+        .VideoSocialButtonGroup,
+        .VideoActionsButtonGroup {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            height: auto;
+
+            button:first-of-type {
+                margin-bottom: 0.8rem;
+            }
         }
 
-        .VideoActionsButtonDelete {
-            background-color: #e73b51;
+        .VideoSocialButtonGroup {
+            float: left;
+            align-items: flex-start;
+
+            .VideoSocialButtonLike:hover svg {
+                fill: pink;
+            }
+
+            .VideoSocialButtonShare:hover svg {
+                fill: rgb(211, 190, 0);
+            }
+        }
+
+        .VideoActionsButtonGroup {
+            float: right;
+            align-items: flex-end;
+
+            button {
+                color: #fff;
+                padding: 0.3rem 1.1rem;
+                border-radius: 3px;
+
+                &:hover {
+                    box-shadow: 0 0 2px 2px #1aa6c8;
+                }
+            }
+
+            .VideoActionsButtonEdit {
+                background-color: #2f2f2f;
+            }
+
+            .VideoActionsButtonDelete {
+                background-color: #e73b51;
+            }
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .VideoSocialButtonGroup,
+        .VideoActionsButtonGroup {
+            flex-direction: row;
+
+            button:first-of-type {
+                margin-bottom: 0;
+                margin-right: 0.8rem;
+            }
         }
     }
 }

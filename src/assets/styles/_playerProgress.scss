@@ -1,38 +1,42 @@
 .PlayerProgress {
-    height: 100%;
-    width: 100%;
-    background-color: rgba(15, 84, 101, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .PlayerProgressBar {
-        outline: none;
-        width: 93%;
-        height: 0.5rem;
-        border-radius: 3px;
-        background-color: rgba(11, 51, 61, 1);
+    @media screen and (min-width: 320px) {
+        height: 100%;
+        width: 100%;
+        background-color: rgba(15, 84, 101, 0.9);
         display: flex;
+        justify-content: center;
         align-items: center;
-        cursor: pointer;
+        margin: 0;
 
-        div {
+        .PlayerProgressBar {
+            outline: none;
+            position: relative;
+            width: 80%;
+            height: 0.5rem;
             border-radius: 3px;
-            height: 100%;
-            background-color: #1aa6c8;
-        }
-
-        .PlayerProgressDone {
-            transition: all 0.1s ease;
+            background-color: rgba(11, 51, 61, 1);
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+            cursor: pointer;
 
-            &::after {
-                display: block;
-                content: "";
+            div {
+                border-radius: 3px;
+                height: 100%;
+                background-color: #1aa6c8;
+            }
+
+            .PlayerProgressDone {
+                transition: all 0.1s ease;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .PlayerProgressCursor {
+                position: absolute;
+                left: 0;
                 width: 1rem;
                 height: 1rem;
                 min-width: 1rem;
@@ -41,8 +45,14 @@
                 border-radius: 100px;
                 transition: all 0.1s ease;
                 background-color: #1aa6c8;
-                transform: translateX(0.5rem);
+                // transform: translateX(-0.5rem);
             }
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .PlayerProgressBar {
+            width: 93%;
         }
     }
 }

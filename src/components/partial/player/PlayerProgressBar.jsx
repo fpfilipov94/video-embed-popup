@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 
+import Draggable from "react-draggable";
+
 class ProgressBar extends Component {
     constructor(props) {
         super(props);
 
         this.seekBar = null;
+        this.seekCursor = null;
     }
 
     seekVideo = async e => {
@@ -20,12 +23,11 @@ class ProgressBar extends Component {
 
         await this.props.player.seekTo(targetSeconds);
         this.props.updatePercentDone(percentage);
-        this.props.player.playVideo();
     };
 
-    refSeekBar = seekBar => {
-        this.seekBar = seekBar;
-    };
+    refSeekBar = el => (this.seekBar = el);
+
+    refSeekCursor = el => (this.seekCursor = el);
 
     render() {
         return (
@@ -41,6 +43,16 @@ class ProgressBar extends Component {
                             width: this.props.percentValue + "%",
                         }}
                     />
+                    <Draggable axis="x" onStop={this.seekVideo}>
+                        <div
+                            className="PlayerProgressCursor"
+                            ref={this.refSeekCursor}
+                            style={{
+                                transform: `translateX(${this.props
+                                    .percentValue - 1.5}%)`,
+                            }}
+                        />
+                    </Draggable>
                 </div>
             </div>
         );

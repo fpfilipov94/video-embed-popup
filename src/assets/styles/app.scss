@@ -21,47 +21,65 @@ a:visited {
 }
 
 .App {
-    width: 50%;
-    height: auto;
-    margin: 2rem auto 0;
-    font-size: 18px;
-    font-family: Helvetica, Arial, sans-serif;
-    position: relative;
+    @media screen and (min-width: 320px) {
+        width: 95%;
+        height: auto;
+        margin: 2rem auto 0;
+        font-size: 18px;
+        font-family: Helvetica, Arial, sans-serif;
+        position: relative;
 
-    &::after {
-        display: table;
-        content: "";
-        clear: both;
-    }
-
-    .CloseLink {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        right: 0;
-        background-color: white;
-        border-radius: 100px;
-        border: 1px solid gray;
-        width: 1.5rem;
-        height: 1.5rem;
-        padding: 0.2rem;
-        transform: translate(8px, -8px);
-
-        &:hover {
-            border: 1px solid #1aa6c8;
+        &::after {
+            display: table;
+            content: "";
+            clear: both;
         }
 
-        svg {
-            width: 100%;
-            height: 100%;
-            fill: red;
+        .CloseLink {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: white;
+            border-radius: 100px;
+            border: 1px solid gray;
+            width: 1.5rem;
+            height: 1.5rem;
+            padding: 0.2rem;
+            transform: translate(8px, -8px);
+
+            &:hover {
+                border: 1px solid #1aa6c8;
+            }
+
+            svg {
+                width: 100%;
+                height: 100%;
+                fill: red;
+            }
+        }
+
+        .MainContainer {
+            border-radius: 3px;
+            background-color: white;
         }
     }
 
-    .MainContainer {
-        border-radius: 3px;
-        background-color: white;
+    @media screen and (min-width: 1024px) {
+        width: 60%;
+    }
+
+    @media screen and (min-width: 1280px) {
+        width: 50%;
+    }
+
+    @media screen and (min-width: 1920px) {
+        width: 40%;
+    }
+
+    @media screen and (min-width: 2560px) {
+        width: 30%;
     }
 }

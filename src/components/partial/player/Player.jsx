@@ -12,8 +12,6 @@ import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import PlayerProgressBar from "./PlayerProgressBar";
 
-import Fade from "../transitions/SlideUp";
-
 class Player extends Component {
     constructor(props) {
         super(props);
@@ -31,6 +29,7 @@ class Player extends Component {
         this.wrapper = null;
         this.container = null;
         this.player = null;
+        this.playerControls = null;
     }
 
     componentDidMount() {
@@ -54,8 +53,10 @@ class Player extends Component {
 
         const frame = await this.player.getIframe();
 
+        // Fix the frame's position (the style gets overriden on init)
         frame.style.margin = "0 auto";
 
+        // Cache the initial aspect ratio in state
         if (!this.state.aspectRatio) {
             this.setState({
                 aspectRatio:
@@ -63,17 +64,15 @@ class Player extends Component {
             });
         }
 
-        const aspectRatio = this.state.aspectRatio;
-
         const wrapperWidth = this.wrapper.getBoundingClientRect().width;
-        const properHeight = wrapperWidth * aspectRatio;
+        const properHeight = wrapperWidth * this.state.aspectRatio;
 
         frame.setAttribute("width", wrapperWidth);
         frame.setAttribute("height", properHeight);
 
         this.wrapper.style.height = `${properHeight}px`;
 
-        // Set iframe to resize on every window resize
+        // Set iframe to resize on window resize
         window.addEventListener("resize", this.adjustPlayerSize);
     };
 
@@ -87,6 +86,9 @@ class Player extends Component {
                 showinfo: 0,
                 controls: 0,
                 rel: 0,
+                playsinline: 1,
+                cc_load_policy: 0,
+                iv_load_policy: 0,
             },
         });
         this.bindPlayerEvents();
@@ -96,6 +98,9 @@ class Player extends Component {
         this.player.on("ready", e => {
             this.props.dispatch(setVideoId(this.props.videoId));
             this.player.stopVideo();
+            this.player.getIframe().then(el => {
+                // el.classList.add("PlayerGuard");
+            });
             this.adjustPlayerSize();
         });
         this.player.on("stateChange", e => {
@@ -136,6 +141,7 @@ class Player extends Component {
             case 2:
             case 5:
                 this.player.playVideo();
+                this.setState({ controlsVisible: true });
                 break;
             default:
                 this.player.pauseVideo();
@@ -165,13 +171,23 @@ class Player extends Component {
         return Math.ceil(fraction * 100);
     };
 
-    showControls = () => this.setState({ controlsVisible: true });
+    showControls = async () => {
+        const playerState = await this.player.getPlayerState();
+        const allowed = playerState === 1 || playerState === 2;
 
-    hideControls = () => this.setState({ controlsVisible: false });
+        this.setState({ controlsVisible: allowed });
+        this.playerControls.classList.add("FadeAnimation");
+    };
+
+    hideControls = () => {
+        this.setState({ controlsVisible: false });
+    };
 
     refContainer = container => (this.container = container);
 
     refWrapper = wrapper => (this.wrapper = wrapper);
+
+    refPlayerControls = el => (this.playerControls = el);
 
     render() {
         return (
@@ -180,12 +196,18 @@ class Player extends Component {
                 ref={this.refWrapper}
                 onMouseEnter={this.showControls}
                 onMouseLeave={this.hideControls}
+                onFocus={this.showControls}
+                onBlur={this.hideControls}
             >
-                <div ref={this.refContainer} />
-                <div className="PlayerGuard" />
-                <Fade
-                    in={this.state.controlsVisible}
+                <div className="PlayerGuard" onClick={this.togglePlayBack}>
+                    <div ref={this.refContainer} />
+                </div>
+                <section
                     className="PlayerControls"
+                    ref={this.refPlayerControls}
+                    style={{
+                        display: this.state.controlsVisible ? "flex" : "none",
+                    }}
                 >
                     <button
                         className="PlayerButton"
@@ -202,10 +224,11 @@ class Player extends Component {
                     </button>
                     <PlayerProgressBar
                         player={this.player}
+                        playing={this.state.playing}
                         percentValue={this.state.percentDone}
                         updatePercentDone={this.updatePercentDone}
                     />
-                </Fade>
+                </section>
             </span>
         );
     }
