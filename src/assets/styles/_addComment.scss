@@ -1,0 +1,17 @@
+.AddComment {
+    margin: 1rem auto 0;
+
+    textarea {
+        width: 100%;
+        border: 2px solid #ebebe9;
+        border-radius: 3px;
+        padding: 0.8rem 1rem;
+        resize: none;
+
+        &::placeholder {
+            font-style: italic;
+            font-weight: lighter;
+            color: rgb(179, 179, 179);
+        }
+    }
+}

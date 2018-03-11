@@ -1,0 +1,60 @@
+.VideoButtons {
+    margin-top: 1rem;
+
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    button {
+        background: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        font-weight: lighter;
+
+        svg {
+            fill: #1aa6c8;
+            margin-right: 0.3rem;
+        }
+    }
+
+    .VideoSocialButtonGroup,
+    .VideoActionsButtonGroup {
+        display: flex;
+        align-items: center;
+        height: 2rem;
+
+        button:first-of-type {
+            margin-right: 0.8rem;
+        }
+    }
+
+    .VideoSocialButtonGroup {
+        float: left;
+    }
+
+    .VideoActionsButtonGroup {
+        float: right;
+
+        button {
+            color: #fff;
+            padding: 0.3rem 1.1rem;
+            border-radius: 3px;
+        }
+
+        .VideoActionsButtonEdit {
+            background-color: #e73b51;
+        }
+
+        .VideoActionsButtonDelete {
+            background-color: #2f2f2f;
+        }
+    }
+}

@@ -21,7 +21,10 @@ export default class Home extends Component {
             const result = validFullUrl.exec(videoUrl);
 
             const videoId = result[1].split("&")[0];
-            // console.log(videoId);
+
+            if (videoId.length !== 11) {
+                return;
+            }
 
             this.setState({
                 videoId,
@@ -33,7 +36,10 @@ export default class Home extends Component {
             const videoId = result[1].indexOf("?")
                 ? result[1].substring(0, result[1].indexOf("?"))
                 : result[1];
-            // console.log(videoId);
+
+            if (videoId.length !== 11) {
+                return;
+            }
 
             this.setState({
                 videoId,

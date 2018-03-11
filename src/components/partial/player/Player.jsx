@@ -1,15 +1,18 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import YouTubePlayer from "youtube-player";
 
-import PlayIcon from "./PlayIcon";
-import PauseIcon from "./PauseIcon";
-import VolumeOnIcon from "./VolumeOnIcon";
-import VolumeOffIcon from "./VolumeOffIcon";
+import { setVideoId } from "../../../store/actions/index";
+
+import PlayIcon from "../icons/PlayIcon";
+import PauseIcon from "../icons/PauseIcon";
+import VolumeOnIcon from "../icons/VolumeOnIcon";
+import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import PlayerProgressBar from "./PlayerProgressBar";
 
-export default class Player extends Component {
+class Player extends Component {
     constructor(props) {
         super(props);
 
@@ -69,6 +72,7 @@ export default class Player extends Component {
 
     bindPlayerEvents = () => {
         this.player.on("ready", e => {
+            this.props.dispatch(setVideoId(this.props.videoId));
             this.player.stopVideo();
             this.adjustPlayerSize();
         });
@@ -77,10 +81,11 @@ export default class Player extends Component {
             switch (e.data) {
                 case 1:
                     this.setState({ playing: true });
+                    // Update the progress bar ASAP
                     this.calculatePercentDone().then(done =>
                         this.setState({ percentDone: done })
                     );
-                    // Set an interval to update the progress bar
+                    // Set an interval to auto-update the progress bar
                     this.setState({
                         timeInterval: setInterval(async () => {
                             this.setState({
@@ -90,7 +95,7 @@ export default class Player extends Component {
                     });
                     break;
                 default:
-                    // Clear the interval and its reference
+                    // Clear the interval and its in-state reference
                     clearInterval(this.state.timeInterval);
                     this.setState({ playing: false, timeInterval: null });
             }
@@ -166,3 +171,7 @@ export default class Player extends Component {
         );
     }
 }
+
+Player = connect()(Player);
+
+export default Player;

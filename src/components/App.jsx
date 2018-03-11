@@ -7,7 +7,7 @@ import "../assets/styles/app.css";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
 
-import CloseIcon from "./partial/CloseIcon";
+import CloseIcon from "./partial/icons/CloseIcon";
 
 export default class App extends Component {
     render() {

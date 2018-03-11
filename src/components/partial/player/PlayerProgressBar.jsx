@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class ProgressBar extends Component {
+class ProgressBar extends Component {
     constructor(props) {
         super(props);
 
@@ -46,3 +46,5 @@ export default class ProgressBar extends Component {
         );
     }
 }
+
+export default ProgressBar;

@@ -1,0 +1,8 @@
+export const ADD_COMMENT = "ADD_COMMENT";
+export const REMOVE_COMMENT = "REMOVE_COMMENT";
+
+export const ADD_SUBCOMMENT = "ADD_SUBCOMMENT";
+export const REMOVE_SUBCOMMENT = "REMOVE_SUBCOMMENT";
+
+export const SET_VIDEO_ID = "SET_VIDEO_ID";
+export const REMOVE_VIDEO_ID = "REMOVE_VIDEO_ID";
