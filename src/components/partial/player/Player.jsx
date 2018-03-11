@@ -12,6 +12,8 @@ import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import PlayerProgressBar from "./PlayerProgressBar";
 
+import Fade from "../transitions/SlideUp";
+
 class Player extends Component {
     constructor(props) {
         super(props);
@@ -120,6 +122,22 @@ class Player extends Component {
         }
     };
 
+    toggleSound = async e => {
+        const muted = await this.player.isMuted();
+
+        if (muted) {
+            this.setState({
+                volume: 100,
+            });
+            this.player.unMute();
+        } else {
+            this.setState({
+                volume: 0,
+            });
+            this.player.mute();
+        }
+    };
+
     calculatePercentDone = async () => {
         const done = await this.player.getCurrentTime();
         const total = await this.player.getDuration();
@@ -145,28 +163,29 @@ class Player extends Component {
             >
                 <div ref={this.refContainer} />
                 <div className="PlayerGuard" />
-                {this.state.controlsVisible && (
-                    <div className="PlayerControls">
-                        <button
-                            className="PlayerButton"
-                            onClick={this.togglePlayBack}
-                        >
-                            {this.state.playing ? <PauseIcon /> : <PlayIcon />}
-                        </button>
-                        <button className="PlayerVolume">
-                            {this.player.isMuted ? (
-                                <VolumeOnIcon />
-                            ) : (
-                                <VolumeOffIcon />
-                            )}
-                        </button>
-                        <PlayerProgressBar
-                            player={this.player}
-                            percentValue={this.state.percentDone}
-                            updatePercentDone={this.updatePercentDone}
-                        />
-                    </div>
-                )}
+                <Fade
+                    in={this.state.controlsVisible}
+                    className="PlayerControls"
+                >
+                    <button
+                        className="PlayerButton"
+                        onClick={this.togglePlayBack}
+                    >
+                        {this.state.playing ? <PauseIcon /> : <PlayIcon />}
+                    </button>
+                    <button className="PlayerVolume" onClick={this.toggleSound}>
+                        {this.state.volume > 0 ? (
+                            <VolumeOnIcon />
+                        ) : (
+                            <VolumeOffIcon />
+                        )}
+                    </button>
+                    <PlayerProgressBar
+                        player={this.player}
+                        percentValue={this.state.percentDone}
+                        updatePercentDone={this.updatePercentDone}
+                    />
+                </Fade>
             </span>
         );
     }

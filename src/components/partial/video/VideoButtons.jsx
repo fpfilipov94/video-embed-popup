@@ -6,11 +6,11 @@ import ShareIcon from "../icons/ShareIcon";
 export default () => (
     <div className="VideoButtons">
         <div className="VideoSocialButtonGroup">
-            <button>
+            <button className="VideoSocialButtonLike">
                 <LikeIcon />
                 LIKE
             </button>
-            <button>
+            <button className="VideoSocialButtonShare">
                 <ShareIcon />
                 SHARE
             </button>
