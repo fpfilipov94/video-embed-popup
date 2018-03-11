@@ -24,6 +24,8 @@ class Player extends Component {
             volume: 100,
             timeInterval: null,
             percentDone: 0,
+            aspectRatio: null,
+            resizing: false,
         };
 
         this.wrapper = null;
@@ -40,13 +42,31 @@ class Player extends Component {
     }
 
     adjustPlayerSize = async () => {
+        /*
+        Remove listener to avoid overcalling
+
+        Comment this out and try resizing the window if you dare
+
+        Even with it, continuous resizing will heat up your CPU
+        because of the continuous calculations
+        */
+        window.removeEventListener("resize", this.adjustPlayerSize);
+
         const frame = await this.player.getIframe();
 
-        const aspectRatio =
-            frame.getAttribute("height") / frame.getAttribute("width");
+        frame.style.margin = "0 auto";
+
+        if (!this.state.aspectRatio) {
+            this.setState({
+                aspectRatio:
+                    frame.getAttribute("height") / frame.getAttribute("width"),
+            });
+        }
+
+        const aspectRatio = this.state.aspectRatio;
 
         const wrapperWidth = this.wrapper.getBoundingClientRect().width;
-        const properHeight = Math.ceil(wrapperWidth * aspectRatio);
+        const properHeight = wrapperWidth * aspectRatio;
 
         frame.setAttribute("width", wrapperWidth);
         frame.setAttribute("height", properHeight);
@@ -54,7 +74,7 @@ class Player extends Component {
         this.wrapper.style.height = `${properHeight}px`;
 
         // Set iframe to resize on every window resize
-        window.addEventListener("resize", this.adjustFrameSize);
+        window.addEventListener("resize", this.adjustPlayerSize);
     };
 
     createPlayer = () => {
