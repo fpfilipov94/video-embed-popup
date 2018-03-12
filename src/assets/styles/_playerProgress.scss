@@ -1,61 +1,71 @@
 .PlayerProgress {
     @media screen and (min-width: 320px) {
-        height: 100%;
         width: 100%;
-        background-color: rgba(15, 84, 101, 0.9);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
+        height: 100%;
+        background-color: rgba(15, 84, 101, 0.8);
 
-        .PlayerProgressBar {
-            outline: none;
+        .ProgressWrapper {
+            margin: 0 auto;
+            text-align: center;
             position: relative;
-            width: 80%;
-            height: 0.5rem;
-            border-radius: 3px;
-            background-color: rgba(11, 51, 61, 1);
+            height: 100%;
+            width: 100%;
             display: flex;
+            justify-content: center;
             align-items: center;
-            cursor: pointer;
+            overflow: visible;
 
-            div {
-                border-radius: 3px;
-                height: 100%;
-                background-color: #1aa6c8;
-            }
+            .ProgressInnerWrapper {
+                position: relative;
+                width: 85%;
+                height: 0.5rem;
 
-            .PlayerProgressDone {
-                transition: all 0.1s ease;
-                display: flex;
-                align-items: center;
-                justify-content: flex-end;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
+                input {
+                    position: absolute;
+                    height: 100%;
+                    width: 103%;
+                    left: -2%;
+                    right: 1%;
+                    opacity: 0;
+                    z-index: 4;
+                }
 
-            .PlayerProgressCursor {
-                position: absolute;
-                left: 0;
-                width: 2rem;
-                height: 2rem;
-                min-width: 1rem;
-                min-height: 1rem;
-                border: 3px solid #fff;
-                border-radius: 100px;
-                transition: all 0.1s ease;
-                background-color: #1aa6c8;
-            }
-        }
-    }
+                .PlayerProgressBar {
+                    background-color: #0b333d;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    z-index: 1;
+                    border-radius: 3px;
 
-    @media screen and (min-width: 768px) {
-        .PlayerProgressBar {
-            width: 93%;
+                    .PlayerProgressDone {
+                        position: relative;
+                        height: 100%;
+                        width: 0%;
+                        max-width: 100%;
+                        background-color: #1aa6c8;
+                        z-index: 2;
+                        border-radius: inherit;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
 
-            .PlayerProgressCursor {
-                width: 1rem;
-                height: 1rem;
+                        .PlayerProgressCursor {
+                            position: relative;
+                            display: block;
+                            height: 1rem;
+                            width: 1rem;
+                            min-height: 1rem;
+                            min-width: 1rem;
+                            border-radius: 100px;
+                            border: 3px solid #fff;
+                            z-index: 2;
+                            background-color: #1aa6c8;
+                        }
+                    }
+                }
             }
         }
     }

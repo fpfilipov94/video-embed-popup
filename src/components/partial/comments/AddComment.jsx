@@ -30,10 +30,8 @@ class AddComment extends Component {
             e.preventDefault();
 
             // Save the comment here and clear the textarea
-            const retrievedText = this.state.commentText;
-            this.setState({
-                commentText: "",
-            });
+            // const retrievedText = this.state.commentText;
+            this.setState({ commentText: "" });
 
             // Shrink the textarea back to normal
             this.textarea.style.height = "auto";
@@ -41,9 +39,7 @@ class AddComment extends Component {
         }
     };
 
-    refTextArea = el => {
-        this.textarea = el;
-    };
+    refTextArea = el => (this.textarea = el);
 
     render() {
         return (

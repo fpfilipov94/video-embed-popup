@@ -12,6 +12,11 @@ import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import PlayerProgressBar from "./PlayerProgressBar";
 
+/*
+    It's not feasible to split this component into smaller pieces
+    All the logic needs to be centralized here for proper control
+*/
+
 class Player extends Component {
     constructor(props) {
         super(props);
@@ -98,15 +103,22 @@ class Player extends Component {
         this.player.on("ready", e => {
             this.props.dispatch(setVideoId(this.props.videoId));
             this.player.stopVideo();
-            this.player.getIframe().then(el => {
-                // el.classList.add("PlayerGuard");
-            });
             this.adjustPlayerSize();
         });
+
         this.player.on("stateChange", e => {
             // https://developers.google.com/youtube/iframe_api_reference#Playback_status
             switch (e.data) {
+                case -1:
+                case 0:
+                case 3:
+                    // Clear the update interval and its in-state reference
+                    clearInterval(this.state.timeInterval);
+                    this.setState({ playing: false });
+                    break;
                 case 1:
+                    this.playerControls.style.height = "30%";
+                    this.playerControls.style.opacity = "1";
                     this.setState({ playing: true });
                     // Update the progress bar ASAP
                     this.calculatePercentDone().then(done =>
@@ -122,18 +134,18 @@ class Player extends Component {
                     });
                     break;
                 default:
-                    // Clear the interval and its in-state reference
+                    // Hide controls to prevent accidental clicking
+                    this.playerControls.style.height = "0";
+                    // Clear the update interval
                     clearInterval(this.state.timeInterval);
-                    this.setState({ playing: false, timeInterval: null });
+                    this.setState({ playing: false });
             }
         });
     };
 
     updatePercentDone = val => this.setState({ percentDone: val });
 
-    togglePlayBack = async e => {
-        e = e || window.event;
-
+    togglePlayBack = async (e = window.event) => {
         const playerState = await this.player.getPlayerState();
 
         // https://developers.google.com/youtube/iframe_api_reference#Playback_status
@@ -150,20 +162,14 @@ class Player extends Component {
         }
     };
 
-    toggleSound = async e => {
-        e = e || window.event;
-
+    toggleSound = async (e = window.event) => {
         const muted = await this.player.isMuted();
 
         if (muted) {
-            this.setState({
-                volume: 100,
-            });
+            this.setState({ volume: 100 });
             this.player.unMute();
         } else {
-            this.setState({
-                volume: 0,
-            });
+            this.setState({ volume: 0 });
             this.player.mute();
         }
     };
@@ -175,17 +181,9 @@ class Player extends Component {
         return Math.ceil(fraction * 100);
     };
 
-    showControls = async () => {
-        const playerState = await this.player.getPlayerState();
-        const allowed = playerState === 1 || playerState === 2;
+    showControls = () => this.setState({ controlsVisible: true });
 
-        this.setState({ controlsVisible: allowed });
-        this.playerControls.classList.add("FadeAnimation");
-    };
-
-    hideControls = () => {
-        this.setState({ controlsVisible: false });
-    };
+    hideControls = () => this.setState({ controlsVisible: false });
 
     refContainer = container => (this.container = container);
 
@@ -210,7 +208,7 @@ class Player extends Component {
                     className="PlayerControls"
                     ref={this.refPlayerControls}
                     style={{
-                        display: this.state.controlsVisible ? "flex" : "none",
+                        opacity: this.state.controlsVisible ? "1" : "0",
                     }}
                 >
                     <button

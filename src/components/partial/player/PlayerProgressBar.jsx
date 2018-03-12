@@ -1,97 +1,65 @@
 import React, { Component } from "react";
 
-import Draggable from "react-draggable";
-
 class ProgressBar extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            dragging: false,
-        };
+        this.state = { videoDuration: null };
 
-        this.seekBar = null;
-        this.seekCursor = null;
+        this.progressDone = null;
     }
 
-    // Update trick to stop cursor disappearing on resize
-    componentDidMount() {
-        window.addEventListener("resize", () => {
-            this.props.updatePercentDone(this.props.percentValue);
-        });
-    }
-
-    componentWillUnmount() {
-        window.addEventListener("resize", () => {
-            this.props.updatePercentDone(this.props.percentValue);
-        });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.state.dragging) {
-            return;
+    async componentWillReceiveProps(nextProps) {
+        // Cache the video duration for later calculations
+        if (!this.state.videoDuration) {
+            this.setState({
+                videoDuration: await nextProps.player.getDuration(),
+            });
         }
-        const seekBarWidth = this.seekBar.getBoundingClientRect().width;
-        const fraction = nextProps.percentValue / 100;
-        const position = fraction * seekBarWidth;
-
-        this.seekCursor.style.transform = `translateX(${position - 9}px)`;
+        // Increment the value for better cursor positioning
+        const adjustedPercent = nextProps.percentValue + 1;
+        this.progressDone.style.width = adjustedPercent + "%";
     }
 
-    seekVideo = async e => {
-        e = e || window.event;
+    handleInput = (e = window.event) => {
+        // Parse the value with parseInt()
+        // Fixes a bug when using it for calculations
+        const fixedPercentValue = Number.parseInt(e.target.value, 10);
+        const fraction = fixedPercentValue / 100;
 
-        this.setState({ dragging: false });
+        const targetSeconds = fraction * this.state.videoDuration;
 
-        const pageX =
-            e.type === "touchend" ? e.changedTouches[0].pageX : e.pageX;
-
-        const seekBarPageOffset = this.seekBar.getBoundingClientRect().left;
-        const seekBarWidth = this.seekBar.getBoundingClientRect().width;
-        const diff = pageX - seekBarPageOffset;
-
-        const percentage = Math.round(100 * diff / seekBarWidth);
-        const fraction = percentage / 100;
-
-        const videoDuration = await this.props.player.getDuration();
-        const targetSeconds = Math.floor(fraction * videoDuration);
-
-        await this.props.player.seekTo(targetSeconds);
-
-        this.props.updatePercentDone(percentage);
+        this.props.player.seekTo(targetSeconds);
+        this.props.updatePercentDone(fixedPercentValue);
     };
 
-    onDragStart = () => this.setState({ dragging: true });
+    refProgressDone = el => (this.progressDone = el);
 
-    refSeekBar = el => (this.seekBar = el);
-
-    refSeekCursor = el => (this.seekCursor = el);
-
+    /*
+        A hidden range input works best for the progress bar
+        Using the progress bar element itself for input is glitchy
+    */
     render() {
         return (
             <div className="PlayerProgress">
-                <div
-                    className="PlayerProgressBar"
-                    onClick={this.seekVideo}
-                    ref={this.refSeekBar}
-                >
-                    <div
-                        className="PlayerProgressDone"
-                        style={{
-                            width: this.props.percentValue + "%",
-                        }}
-                    />
-                    <Draggable
-                        axis="x"
-                        bounds="parent"
-                        onStart={this.onDragStart}
-                        onStop={this.seekVideo}
-                    >
-                        <div
-                            className="PlayerProgressCursor"
-                            ref={this.refSeekCursor}
+                <div className="ProgressWrapper">
+                    <div className="ProgressInnerWrapper">
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            onInput={this.handleInput}
+                            value={this.props.percentValue}
                         />
-                    </Draggable>
+                        <div className="PlayerProgressBar">
+                            <div
+                                className="PlayerProgressDone"
+                                ref={this.refProgressDone}
+                            >
+                                <div className="PlayerProgressCursor" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
