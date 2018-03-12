@@ -16,17 +16,20 @@
 
         .CommentContainer {
             padding: 0;
-            margin: 0;
+            margin: 0 0 2rem;
 
             .CommentInfo {
                 display: flex;
-                .CommentUserAvatar {
-                    background-color: #000;
-                    color: #fff;
 
+                .CommentUserAvatar {
                     width: 4rem;
                     height: 4rem;
                     border-radius: 100px;
+
+                    img {
+                        width: 100%;
+                        object-fit: contain;
+                    }
                 }
 
                 .CommentUserInfo {
@@ -43,6 +46,7 @@
                         font-size: 1.4rem;
                         margin-top: 0.3rem;
                         margin-bottom: 0.2rem;
+                        font-family: "Times New Roman", Times, serif;
                     }
 
                     .CommentUserPostDate {
@@ -171,4 +175,11 @@
             }
         }
     }
+}
+
+.NoComments {
+    margin: 1rem auto;
+    text-align: center;
+    font-style: italic;
+    font-size: 1rem;
 }

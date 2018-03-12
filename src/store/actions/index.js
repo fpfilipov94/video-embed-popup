@@ -15,6 +15,7 @@ export const addComment = text => ({
     type: ADD_COMMENT,
     user: MockUser,
     id: nextCommentId++,
+    date: new Date(),
     text,
 });
 

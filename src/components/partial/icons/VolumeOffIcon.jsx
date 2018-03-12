@@ -1,6 +1,6 @@
 import React from "react";
 
-export default () => (
+const VolumeOffIcon = () => (
     <svg
         fill="#FFFFFF"
         height="24"
@@ -12,3 +12,5 @@ export default () => (
         <path d="M0 0h24v24H0z" fill="none" />
     </svg>
 );
+
+export default VolumeOffIcon;

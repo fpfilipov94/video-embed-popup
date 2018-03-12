@@ -7,25 +7,23 @@ import FlagIcon from "../icons/FlagIcon";
 
 import AddSubComment from "./AddSubComment";
 
-export default () => (
+import dateFormatter from "../../../helpers/dateFormatter";
+
+export default ({ comment }) => (
     <li className="CommentContainer">
         <section className="CommentInfo">
-            <div className="CommentUserAvatar">MEH</div>
+            <div className="CommentUserAvatar">
+                <img src={comment.user.avatar} alt="" />
+            </div>
             <div className="CommentUserInfo">
-                <p className="CommentUserName">Some Weird Rascal</p>
-                <p className="CommentUserPostDate">MARCH 7, 2013 AT 7:30 PM</p>
+                <p className="CommentUserName">{comment.user.fullName}</p>
+                <p className="CommentUserPostDate">
+                    {dateFormatter(comment.date)}
+                </p>
             </div>
         </section>
         <section className="CommentBody">
-            <div className="CommentText">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse varius commodo dui, vel commodo nisi ultricies nec.
-                Praesent sodales ligula et eros lacinia ultricies. Etiam at
-                laoreet nibh. Suspendisse facilisis risus purus. In malesuada
-                libero quam. Integer a finibus ligula. Vestibulum condimentum at
-                ligula et pretium. Ut ut eleifend dui, eu condimentum quam.
-                Donec blandit hendrerit eros, id dignissim nulla maximus id.
-            </div>
+            <div className="CommentText">{comment.text}</div>
             <div className="CommentActions">
                 <div className="CommentActionsSocial">
                     <button className="CommentActionsLike">

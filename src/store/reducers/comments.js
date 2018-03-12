@@ -14,6 +14,7 @@ const comments = (state = [], action) => {
                     user: action.user,
                     id: action.id,
                     text: action.text,
+                    date: action.date,
                     subComments: { lastId: -1, list: [] },
                 },
             ];
