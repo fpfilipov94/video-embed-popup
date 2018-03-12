@@ -32,7 +32,6 @@ class ProgressBar extends Component {
             return;
         }
         const seekBarWidth = this.seekBar.getBoundingClientRect().width;
-        const fixedPercentage = nextProps.percentValue - 1;
         const fraction = nextProps.percentValue / 100;
         const position = fraction * seekBarWidth;
 
@@ -46,8 +45,6 @@ class ProgressBar extends Component {
 
         const pageX =
             e.type === "touchend" ? e.changedTouches[0].pageX : e.pageX;
-        const pageY =
-            e.type === "touchend" ? e.changedTouches[0].pageY : e.pageY;
 
         const seekBarPageOffset = this.seekBar.getBoundingClientRect().left;
         const seekBarWidth = this.seekBar.getBoundingClientRect().width;
