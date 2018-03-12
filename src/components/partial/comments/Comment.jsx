@@ -1,5 +1,12 @@
 import React from "react";
 
+import LikeIcon from "../icons/LikeIcon";
+import ShareIcon from "../icons/ShareIcon";
+import CommentIcon from "../icons/CommentIcon";
+import FlagIcon from "../icons/FlagIcon";
+
+import AddSubComment from "./AddSubComment";
+
 export default () => (
     <li className="CommentContainer">
         <section className="CommentInfo">
@@ -21,14 +28,27 @@ export default () => (
             </div>
             <div className="CommentActions">
                 <div className="CommentActionsSocial">
-                    <button>LIKE</button>
-                    <button>SHARE</button>
-                    <button>COMMENT</button>
+                    <button className="CommentActionsLike">
+                        <LikeIcon />
+                        LIKE
+                    </button>
+                    <button className="CommentActionsShare">
+                        <ShareIcon />
+                        SHARE
+                    </button>
+                    <button className="CommentActionsComment">
+                        <CommentIcon />
+                        COMMENT
+                    </button>
                 </div>
                 <div className="CommentActionsReport">
-                    <button>REPORT</button>
+                    <button>
+                        <FlagIcon />
+                        REPORT
+                    </button>
                 </div>
             </div>
         </section>
+        <AddSubComment />
     </li>
 );

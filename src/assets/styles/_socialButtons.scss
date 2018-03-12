@@ -1,0 +1,19 @@
+%socialButton {
+    background: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: lighter;
+    cursor: pointer;
+    text-transform: uppercase;
+
+    svg {
+        fill: #1aa6c8;
+        margin-right: 0.3rem;
+    }
+}
