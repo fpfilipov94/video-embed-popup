@@ -132,6 +132,8 @@ class Player extends Component {
     updatePercentDone = val => this.setState({ percentDone: val });
 
     togglePlayBack = async e => {
+        e = e || window.event;
+
         const playerState = await this.player.getPlayerState();
 
         // https://developers.google.com/youtube/iframe_api_reference#Playback_status
@@ -149,6 +151,8 @@ class Player extends Component {
     };
 
     toggleSound = async e => {
+        e = e || window.event;
+
         const muted = await this.player.isMuted();
 
         if (muted) {
