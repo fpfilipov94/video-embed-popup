@@ -3,6 +3,7 @@ import {
     REMOVE_COMMENT,
     ADD_SUBCOMMENT,
     REMOVE_SUBCOMMENT,
+    REMOVE_VIDEO_ID,
 } from "../actions/actionTypes";
 
 const comments = (state = [], action) => {
@@ -59,6 +60,8 @@ const comments = (state = [], action) => {
                 }
                 return c;
             });
+        case REMOVE_VIDEO_ID:
+            return [];
         default:
             return state;
     }

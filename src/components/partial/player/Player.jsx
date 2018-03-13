@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import YouTubePlayer from "youtube-player";
-
-import { setVideoId } from "../../../store/actions/index";
 
 import PlayIcon from "../icons/PlayIcon";
 import PauseIcon from "../icons/PauseIcon";
@@ -42,10 +39,17 @@ class Player extends Component {
     }
 
     componentDidMount() {
+        // Hide the controls and timer initially
+        this.playerControls.style.height = "0";
+        this.timer.style.display = "none";
+        // Initialize the player into its container
         this.createPlayer();
     }
 
     componentWillUnmount() {
+        // Remove the resize listener
+        window.removeEventListener("resize", this.adjustPlayerSize);
+        // Destroy the player instance linked to the container
         this.player.destroy();
     }
 
@@ -105,8 +109,6 @@ class Player extends Component {
 
     bindPlayerEvents = () => {
         this.player.on("ready", async e => {
-            // Save the video id in the store
-            this.props.dispatch(setVideoId(this.props.videoId));
             // Prevent unpredictable autoplaying
             this.player.stopVideo();
             // Fix the player size by aspect ratio
@@ -165,12 +167,10 @@ class Player extends Component {
 
     updatePercentDone = val => this.setState({ percentDone: val });
 
-    updateTimeLeft = async val => {
-        // const currentTime = await this.player.getCurrentTime();
+    updateTimeLeft = async val =>
         this.setState({
             videoTimeLeft: timeFormatter(this.state.videoDuration - val),
         });
-    };
 
     togglePlayBack = async (e = window.event) => {
         const playerState = await this.player.getPlayerState();
@@ -275,7 +275,5 @@ class Player extends Component {
         );
     }
 }
-
-Player = connect()(Player);
 
 export default Player;

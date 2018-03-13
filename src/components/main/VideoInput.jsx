@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router";
+import { connect } from "react-redux";
 
-export default class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            goToVideo: false,
-            videoId: "",
-        };
-        this.handleInput = this.handleInput.bind(this);
-    }
+import { setVideoId } from "../../store/actions/index";
 
-    handleInput(event) {
+class VideoInput extends Component {
+    handleInput = (event = window.event) => {
         const validFullUrl = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com)\/watch\?v=(.+)$/;
         const validShortUrl = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.?be)\/(.+)$/;
 
@@ -25,11 +18,7 @@ export default class Home extends Component {
             if (videoId.length !== 11) {
                 return;
             }
-
-            this.setState({
-                videoId,
-                goToVideo: true,
-            });
+            this.props.dispatch(setVideoId(videoId));
         } else if (validShortUrl.test(videoUrl)) {
             const result = validShortUrl.exec(videoUrl);
 
@@ -41,25 +30,13 @@ export default class Home extends Component {
             if (videoId.length !== 11) {
                 return;
             }
-
-            this.setState({
-                videoId,
-                goToVideo: true,
-            });
+            this.props.dispatch(setVideoId(videoId));
         }
-    }
+    };
 
     render() {
-        const { goToVideo, videoId } = this.state;
-
-        if (goToVideo === true) {
-            const redirectPath = `/video/${encodeURIComponent(videoId)}`;
-
-            return <Redirect to={redirectPath} />;
-        }
-
         return (
-            <div className="Home">
+            <div className="VideoInput">
                 <input
                     type="text"
                     placeholder="Paste YouTube URL..."
@@ -69,3 +46,7 @@ export default class Home extends Component {
         );
     }
 }
+
+VideoInput = connect()(VideoInput);
+
+export default VideoInput;

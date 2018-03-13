@@ -23,7 +23,7 @@ class Comment extends Component {
     // Abstract the render logic away here for reuse as a subcomment
     renderComment = (comment, isMain) => {
         return (
-            <li className="CommentContainer">
+            <li className="CommentContainer" key={comment.id}>
                 <section className="CommentInfo">
                     <div className="CommentUserAvatar">
                         <img src={comment.user.avatar} alt="" />

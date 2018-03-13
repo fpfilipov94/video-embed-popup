@@ -14,6 +14,10 @@ const MONTHS = [
 ];
 
 export default date => {
+    if (typeof date === "string") {
+        date = new Date(date);
+    }
+
     const month = MONTHS[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
@@ -27,5 +31,7 @@ export default date => {
         hour -= 12;
     }
 
-    return `${month} ${day}, ${year} AT ${hour}:${minutes} ${dayTime}`;
+    let displayMinutes = minutes < 10 ? "0" + minutes : minutes.toString();
+
+    return `${month} ${day}, ${year} AT ${hour}:${displayMinutes} ${dayTime}`;
 };

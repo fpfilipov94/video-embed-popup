@@ -6,3 +6,5 @@ export const REMOVE_SUBCOMMENT = "REMOVE_SUBCOMMENT";
 
 export const SET_VIDEO_ID = "SET_VIDEO_ID";
 export const REMOVE_VIDEO_ID = "REMOVE_VIDEO_ID";
+
+export const CLEAR_COMMENTS = "CLEAR_COMMENTS";

@@ -48,7 +48,6 @@ class AddComment extends Component {
 
             // Shrink the textarea back to normal
             this.textarea.style.height = "auto";
-            console.log("submitted!");
         }
     };
 

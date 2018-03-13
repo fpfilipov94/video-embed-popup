@@ -1,28 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import { PersistGate } from "redux-persist/integration/react";
 
 import "../assets/styles/app.css";
 
-import Home from "./pages/Home";
-import Video from "./pages/Video";
+import Home from "./main/Home";
+import Popup from "./main/Popup";
+import Loading from "./main/Loading";
 
-import CloseIcon from "./partial/icons/CloseIcon";
+const App = ({ persistor }) => (
+    <PersistGate loading={<Loading />} persistor={persistor}>
+        <Router>
+            <div className="App">
+                <Route exact path="/" component={Home} />
+                <Route path="/popup" component={Popup} />
+            </div>
+        </Router>
+    </PersistGate>
+);
 
-export default class App extends Component {
-    render() {
-        return (
-            <Router>
-                <div className="App">
-                    <Link to="/" className="CloseLink">
-                        <CloseIcon />
-                    </Link>
-                    <div className="MainContainer">
-                        <Route exact path="/" component={Home} />
-                        <Route path="/video/:id" component={Video} />
-                    </div>
-                </div>
-            </Router>
-        );
-    }
-}
+export default App;
