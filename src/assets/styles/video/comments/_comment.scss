@@ -33,7 +33,7 @@
                 }
 
                 .CommentUserName {
-                    color: #1aa6c8;
+                    color: $color-bluish;
                     font-size: 1.4rem;
                     margin-top: 0.3rem;
                     margin-bottom: 0.2rem;
@@ -49,8 +49,8 @@
 
         .CommentBody {
             margin-top: 1.3rem;
-            border-left: 5px solid #e2e2e2;
-            border-bottom: 1px solid #e2e2e2;
+            border-left: 5px solid $color-light-grey;
+            border-bottom: 1px solid $color-light-grey;
             padding-top: 1.2rem;
             padding-left: 1.2rem;
             padding-bottom: 1rem;
@@ -68,7 +68,6 @@
                 }
 
                 .CommentActionsSocial {
-                    // float: left;
                     display: flex;
                     flex-direction: row;
                     justify-content: center;
@@ -95,7 +94,6 @@
                 }
 
                 .CommentActionsReport {
-                    // float: right;
                     margin-top: 1rem;
                     display: flex;
                     flex-direction: row;
@@ -103,11 +101,11 @@
                     align-items: center;
 
                     button svg {
-                        fill: #e2e2e2;
+                        fill: $color-light-grey;
+                    }
 
-                        &:hover {
-                            fill: #e73b51;
-                        }
+                    button:hover svg {
+                        fill: $color-reddish;
                     }
                 }
             }

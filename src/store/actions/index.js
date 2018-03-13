@@ -26,6 +26,8 @@ export const removeComment = id => ({
 
 export const addSubComment = (parentId, text) => ({
     type: ADD_SUBCOMMENT,
+    user: MockUser,
+    date: new Date(),
     parentId,
     text,
 });

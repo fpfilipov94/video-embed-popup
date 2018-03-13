@@ -28,7 +28,12 @@ const comments = (state = [], action) => {
                         lastId: newSubId,
                         list: [
                             ...c.subComments.list,
-                            { id: newSubId, text: action.text },
+                            {
+                                user: action.user,
+                                id: newSubId,
+                                date: action.date,
+                                text: action.text,
+                            },
                         ],
                     };
                     return {

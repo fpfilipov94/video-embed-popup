@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import Player from "../partial/player/Player";
 import VideoButtons from "../partial/video/VideoButtons";

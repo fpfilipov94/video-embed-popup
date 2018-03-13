@@ -1,0 +1,52 @@
+.CommentSubComments {
+    border-left: 5px solid $color-dark-grey;
+
+    .CommentContainer {
+        padding-top: 1rem;
+        margin-left: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .CommentBody {
+        border-left-width: 1px;
+    }
+}
+
+.AddSubComment {
+    padding-top: 1rem;
+    padding-left: 1.5rem;
+    padding-bottom: 0.5rem;
+
+    .AddSubCommentTypes {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        button {
+            margin-right: 1rem;
+            font-size: 0.8rem;
+            font-weight: normal;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        button.selected {
+            font-weight: bold;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 49%;
+                display: block;
+                border: 5px solid transparent;
+                border-bottom-color: $color-light-grey;
+            }
+        }
+    }
+
+    .AddComment {
+        margin-top: 0;
+    }
+}

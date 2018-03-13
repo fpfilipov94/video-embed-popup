@@ -1,5 +1,5 @@
-@import "../../global/socialButtons";
 @import "./comment";
+@import "./subComment";
 
 .CommentList {
     list-style: none;
@@ -7,45 +7,6 @@
     margin-left: 0.9rem;
     margin-right: 2.1rem;
     padding: 0;
-
-    .AddSubComment {
-        padding-top: 1rem;
-        padding-left: 1.5rem;
-        padding-bottom: 0.5rem;
-        border-left: 5px solid #bfbfbf;
-
-        .AddSubCommentTypes {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-
-            button {
-                margin-right: 1rem;
-                font-size: 0.8rem;
-                padding-bottom: 0.5rem;
-                position: relative;
-            }
-
-            button.selected {
-                font-weight: bold;
-
-                &::after {
-                    content: "";
-                    position: absolute;
-                    bottom: 0;
-                    left: 49%;
-                    display: block;
-                    border: 5px solid transparent;
-                    border-bottom-color: #ebebe9;
-                }
-            }
-        }
-
-        .AddComment {
-            margin-top: 0;
-        }
-    }
 }
 
 .NoComments {
