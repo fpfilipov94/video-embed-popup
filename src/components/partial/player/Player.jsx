@@ -26,7 +26,6 @@ class Player extends Component {
             volume: 100,
             timeInterval: null,
             percentDone: 0,
-            aspectRatio: null,
             videoTimeLeft: null,
             videoDuration: null,
         };
@@ -39,7 +38,11 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        // Hide the controls and timer initially
+        // Adjust the wrapper size
+        this.adjustWrapperSize();
+        // Hide the wrapper
+        this.wrapper.style.opacity = "0";
+        // Hide the controls and timer
         this.playerControls.style.height = "0";
         this.timer.style.display = "none";
         // Initialize the player into its container
@@ -47,46 +50,35 @@ class Player extends Component {
     }
 
     componentWillUnmount() {
-        // Remove the resize listener
-        window.removeEventListener("resize", this.adjustPlayerSize);
         // Destroy the player instance linked to the container
         this.player.destroy();
     }
 
+    adjustWrapperSize = () => {
+        // Use the aspect ratio that applies to modern content
+        const aspectRatio = 9 / 16;
+        // Use the wrapper width to calculate its desired height
+        const wrapperWidth = this.wrapper.getBoundingClientRect().width;
+        const properHeight = wrapperWidth * aspectRatio;
+        // Set the height in wrapper's style
+        this.wrapper.style.height = `${properHeight}px`;
+    };
+
     adjustPlayerSize = async () => {
-        /*
-        Remove listener to avoid overcalling
-
-        Comment this out and try resizing the window if you dare
-
-        Even with it, continuous resizing will heat up your CPU
-        because of the continuous calculations
-        */
-        window.removeEventListener("resize", this.adjustPlayerSize);
-
+        // Grab the iframe
         const frame = await this.player.getIframe();
-
         // Fix the frame's position (the style gets overriden on init)
         frame.style.margin = "0 auto";
-
-        // Cache the initial aspect ratio in state
-        if (!this.state.aspectRatio) {
-            this.setState({
-                aspectRatio:
-                    frame.getAttribute("height") / frame.getAttribute("width"),
-            });
-        }
-
+        // Add a transition
+        frame.style.transition = "height 200ms ease-in-out";
+        // Hard code the aspect ratio
+        const aspectRatio = 9 / 16;
+        // Calculate the desired height
         const wrapperWidth = this.wrapper.getBoundingClientRect().width;
-        const properHeight = wrapperWidth * this.state.aspectRatio;
-
+        const properHeight = wrapperWidth * aspectRatio;
+        // Fit the iframe properly into the wrapper
         frame.setAttribute("width", wrapperWidth);
         frame.setAttribute("height", properHeight);
-
-        this.wrapper.style.height = `${properHeight}px`;
-
-        // Set iframe to resize on window resize
-        window.addEventListener("resize", this.adjustPlayerSize);
     };
 
     createPlayer = () => {
@@ -111,8 +103,10 @@ class Player extends Component {
         this.player.on("ready", async e => {
             // Prevent unpredictable autoplaying
             this.player.stopVideo();
-            // Fix the player size by aspect ratio
+            // Fix the iframe size
             this.adjustPlayerSize();
+            // Show the wrapper
+            this.wrapper.style.opacity = "1";
             // Cache the video duration and set time left
             const videoDuration = await this.player.getDuration();
             this.setState({
