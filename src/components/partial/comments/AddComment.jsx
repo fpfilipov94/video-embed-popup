@@ -58,7 +58,7 @@ class AddComment extends Component {
             <div className="AddComment">
                 <textarea
                     rows="1"
-                    placeholder="comment..."
+                    placeholder={this.props.placeholder}
                     ref={this.refTextArea}
                     onChange={this.handleInput}
                     value={this.state.commentText}

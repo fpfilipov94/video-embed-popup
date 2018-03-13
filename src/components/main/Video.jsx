@@ -11,7 +11,7 @@ const Video = ({ videoId }) => (
             <div className="PlayerUIContainer">
                 <Player videoId={videoId} />
                 <VideoButtons />
-                <AddComment target="all" />
+                <AddComment target="all" placeholder="Comment..." />
             </div>
             <CommentList />
         </div>

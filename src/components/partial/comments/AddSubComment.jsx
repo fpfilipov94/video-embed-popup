@@ -9,7 +9,7 @@ const AddSubComment = ({ target }) => (
             <button>PHOTO</button>
             <button>FEEDBACK</button>
         </div>
-        <AddComment target={target} />
+        <AddComment target={target} placeholder="Reply..." />
     </div>
 );
 
