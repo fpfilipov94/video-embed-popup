@@ -1,0 +1,129 @@
+.CommentActionsSocial button,
+.CommentActionsReport button,
+.AddSubCommentTypes button {
+    @extend %socialButton;
+}
+
+@media screen and (min-width: 320px) {
+    .CommentContainer {
+        padding: 0;
+        margin: 0 0 2rem;
+
+        .CommentInfo {
+            display: flex;
+
+            .CommentUserAvatar {
+                width: 4rem;
+                height: 4rem;
+                border-radius: 100px;
+
+                img {
+                    width: 100%;
+                    object-fit: contain;
+                }
+            }
+
+            .CommentUserInfo {
+                margin-left: 1.2rem;
+
+                .CommentUserName,
+                .CommentUserPostDate {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .CommentUserName {
+                    color: #1aa6c8;
+                    font-size: 1.4rem;
+                    margin-top: 0.3rem;
+                    margin-bottom: 0.2rem;
+                    font-family: "Times New Roman", Times, serif;
+                }
+
+                .CommentUserPostDate {
+                    font-size: 0.7rem;
+                    color: #979696;
+                }
+            }
+        }
+
+        .CommentBody {
+            margin-top: 1.3rem;
+            border-left: 5px solid #e2e2e2;
+            border-bottom: 1px solid #e2e2e2;
+            padding-top: 1.2rem;
+            padding-left: 1.2rem;
+            padding-bottom: 1rem;
+
+            .CommentText {
+                margin-bottom: 1.1rem;
+                line-height: 1.9rem;
+            }
+
+            .CommentActions {
+                &::after {
+                    display: table;
+                    content: "";
+                    clear: both;
+                }
+
+                .CommentActionsSocial {
+                    // float: left;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+
+                    button {
+                        margin-right: 1rem;
+
+                        &:last-of-type {
+                            margin-right: 0;
+                        }
+                    }
+
+                    .CommentActionsLike:hover svg {
+                        fill: pink;
+                    }
+
+                    .CommentActionsShare:hover svg {
+                        fill: rgb(211, 190, 0);
+                    }
+
+                    .CommentActionsComment:hover svg {
+                        fill: #2c6ee9;
+                    }
+                }
+
+                .CommentActionsReport {
+                    // float: right;
+                    margin-top: 1rem;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+
+                    button svg {
+                        fill: #e2e2e2;
+
+                        &:hover {
+                            fill: #e73b51;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .CommentContainer .CommentBody .CommentActions {
+        .CommentActionsSocial {
+            float: left;
+        }
+
+        .CommentActionsReport {
+            float: right;
+            margin-top: 0;
+        }
+    }
+}

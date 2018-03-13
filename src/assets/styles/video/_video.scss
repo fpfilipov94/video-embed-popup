@@ -1,6 +1,7 @@
+@import "./player/player";
 @import "./videoButtons";
-@import "./addComment";
-@import "./commentList";
+@import "./comments/addComment";
+@import "./comments/commentList";
 
 .Video {
     @media screen and (min-width: 320px) {

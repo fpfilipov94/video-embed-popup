@@ -1,8 +1,7 @@
 @import "normalize.css/normalize";
 
-@import "assets/styles/home";
-@import "assets/styles/video";
-@import "assets/styles/player";
+@import "./home/home";
+@import "./video/video";
 
 * {
     box-sizing: border-box;

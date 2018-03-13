@@ -33,9 +33,10 @@ export default class Home extends Component {
         } else if (validShortUrl.test(videoUrl)) {
             const result = validShortUrl.exec(videoUrl);
 
-            const videoId = result[1].indexOf("?")
-                ? result[1].substring(0, result[1].indexOf("?"))
-                : result[1];
+            const videoId =
+                result[1].indexOf("?") >= 0
+                    ? result[1].substring(0, result[1].indexOf("?"))
+                    : result[1];
 
             if (videoId.length !== 11) {
                 return;
