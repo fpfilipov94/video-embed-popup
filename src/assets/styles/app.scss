@@ -25,6 +25,7 @@ a:visited {
 .App {
     .Home {
         text-align: center;
+        animation: fadeIn 500ms ease-in-out;
 
         .ShowPopup {
             @extend %socialButton;
@@ -80,6 +81,7 @@ a:visited {
             border-radius: 3px;
             padding-bottom: 0.1rem;
             background-color: white;
+            animation: fadeIn 300ms ease-in-out;
         }
     }
 
@@ -109,12 +111,17 @@ a:visited {
     justify-content: center;
     align-items: center;
 
+    // The store rehydrates too fast to see this
+    // It may not actually be styled properly...
     &::after {
         display: block;
         content: "";
         position: relative;
         border-left: 5px solid $color-bluish;
         border-right: 5px solid $color-bluish;
+        width: 7rem;
+        height: 7rem;
+        border-radius: 100px;
         animation: spin 50ms ease-in-out 0 infinite normal;
     }
 }
@@ -125,5 +132,14 @@ a:visited {
     }
     to {
         transform: rotate(360);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
