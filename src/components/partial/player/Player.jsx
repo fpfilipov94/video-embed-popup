@@ -40,8 +40,6 @@ class Player extends Component {
     componentDidMount() {
         // Adjust the wrapper size
         this.adjustWrapperSize();
-        // Hide the wrapper
-        this.wrapper.style.opacity = "0";
         // Hide the controls and timer
         this.playerControls.style.height = "0";
         this.timer.style.display = "none";
