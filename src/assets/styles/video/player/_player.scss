@@ -1,3 +1,4 @@
+@import "../../global/colors";
 @import "./playerProgress";
 
 .Player {
@@ -66,7 +67,7 @@
         }
 
         .PlayerButton {
-            background-color: #1aa6c8;
+            background-color: $color-bluish;
         }
 
         .PlayerVolume {
