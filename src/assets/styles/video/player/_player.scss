@@ -16,6 +16,18 @@
         transition: all 0.2s ease;
     }
 
+    .PlayerTimeLeft {
+        position: absolute;
+        right: 0.1rem;
+        bottom: 3.6rem;
+        padding: 0.2rem 0.4rem;
+        z-index: 42;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 2px;
+        color: white;
+        transition: opacity 200ms ease-in-out;
+    }
+
     .PlayerControls {
         position: absolute;
         bottom: 0;

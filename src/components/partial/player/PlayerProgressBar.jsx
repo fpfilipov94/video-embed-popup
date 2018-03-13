@@ -31,6 +31,7 @@ class ProgressBar extends Component {
 
         this.props.player.seekTo(targetSeconds);
         this.props.updatePercentDone(fixedPercentValue);
+        this.props.updateTimeLeft(targetSeconds);
     };
 
     refProgressDone = el => (this.progressDone = el);

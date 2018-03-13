@@ -12,6 +12,8 @@ import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import PlayerProgressBar from "./PlayerProgressBar";
 
+import timeFormatter from "../../../helpers/timeFormatter";
+
 /*
     It's not feasible to split this component into smaller pieces
     All the logic needs to be centralized here for proper control
@@ -28,13 +30,15 @@ class Player extends Component {
             timeInterval: null,
             percentDone: 0,
             aspectRatio: null,
-            resizing: false,
+            videoTimeLeft: null,
+            videoDuration: null,
         };
 
         this.wrapper = null;
         this.container = null;
         this.player = null;
         this.playerControls = null;
+        this.timer = null;
     }
 
     componentDidMount() {
@@ -100,10 +104,19 @@ class Player extends Component {
     };
 
     bindPlayerEvents = () => {
-        this.player.on("ready", e => {
+        this.player.on("ready", async e => {
+            // Save the video id in the store
             this.props.dispatch(setVideoId(this.props.videoId));
+            // Prevent unpredictable autoplaying
             this.player.stopVideo();
+            // Fix the player size by aspect ratio
             this.adjustPlayerSize();
+            // Cache the video duration and set time left
+            const videoDuration = await this.player.getDuration();
+            this.setState({
+                videoDuration,
+                videoTimeLeft: timeFormatter(videoDuration),
+            });
         });
 
         this.player.on("stateChange", e => {
@@ -117,8 +130,9 @@ class Player extends Component {
                     this.setState({ playing: false });
                     break;
                 case 1:
+                    // Show the controls and timer
                     this.playerControls.style.height = "30%";
-                    this.playerControls.style.opacity = "1";
+                    this.timer.style.display = "block";
                     this.setState({ playing: true });
                     // Update the progress bar ASAP
                     this.calculatePercentDone().then(done =>
@@ -127,8 +141,12 @@ class Player extends Component {
                     // Set an interval to auto-update the progress bar
                     this.setState({
                         timeInterval: setInterval(async () => {
+                            const currentTime = await this.player.getCurrentTime();
                             this.setState({
                                 percentDone: await this.calculatePercentDone(),
+                                videoTimeLeft: timeFormatter(
+                                    this.state.videoDuration - currentTime
+                                ),
                             });
                         }, 1000),
                     });
@@ -136,6 +154,8 @@ class Player extends Component {
                 default:
                     // Hide controls to prevent accidental clicking
                     this.playerControls.style.height = "0";
+                    // Hide the timer
+                    this.timer.style.display = "none";
                     // Clear the update interval
                     clearInterval(this.state.timeInterval);
                     this.setState({ playing: false });
@@ -144,6 +164,13 @@ class Player extends Component {
     };
 
     updatePercentDone = val => this.setState({ percentDone: val });
+
+    updateTimeLeft = async val => {
+        // const currentTime = await this.player.getCurrentTime();
+        this.setState({
+            videoTimeLeft: timeFormatter(this.state.videoDuration - val),
+        });
+    };
 
     togglePlayBack = async (e = window.event) => {
         const playerState = await this.player.getPlayerState();
@@ -191,6 +218,8 @@ class Player extends Component {
 
     refPlayerControls = el => (this.playerControls = el);
 
+    refTimer = el => (this.timer = el);
+
     render() {
         return (
             <span
@@ -203,6 +232,15 @@ class Player extends Component {
             >
                 <div className="PlayerGuard" onClick={this.togglePlayBack}>
                     <div ref={this.refContainer} />
+                </div>
+                <div
+                    className="PlayerTimeLeft"
+                    ref={this.refTimer}
+                    style={{
+                        opacity: this.state.controlsVisible ? "1" : "0",
+                    }}
+                >
+                    -{this.state.videoTimeLeft}
                 </div>
                 <section
                     className="PlayerControls"
@@ -227,8 +265,10 @@ class Player extends Component {
                     <PlayerProgressBar
                         player={this.player}
                         playing={this.state.playing}
+                        videoDuration={this.state.videoDuration}
                         percentValue={this.state.percentDone}
                         updatePercentDone={this.updatePercentDone}
+                        updateTimeLeft={this.updateTimeLeft}
                     />
                 </section>
             </span>
