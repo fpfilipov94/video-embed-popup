@@ -4,7 +4,6 @@ import VolumeOnIcon from "../icons/VolumeOnIcon";
 import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import deviceIsMobile from "../../../helpers/deviceIsMobile";
-import browserIsFirefox from "../../../helpers/browserIsFirefox";
 
 class PlayerVolumeButton extends PureComponent {
     // Slider should always be visible on mobile (no mouse to trigger hover)
@@ -12,21 +11,12 @@ class PlayerVolumeButton extends PureComponent {
 
     // Cache bool whether we're on mobile
     onMobile = deviceIsMobile();
-    inFirefox = browserIsFirefox();
 
     volumeControlEl = null;
     volumeLevelEl = null;
 
-    handleInput = (e = window.event) => {
-        // Disable slider on Firefox (doesn't work - can't figure out why)
-        if (this.inFirefox) {
-            return;
-        }
-        // Fix the operation glitch
-        const percent = Number.parseInt(e.target.value, 10);
-        // Update player volume
-        this.props.updateVolume(percent);
-    };
+    handleInput = (e = window.event) =>
+        this.props.updateVolume(Number.parseInt(e.target.value, 10));
 
     showSlider = () => this.setState({ sliderVisible: true });
 
@@ -37,20 +27,6 @@ class PlayerVolumeButton extends PureComponent {
     refVolumeLevelEl = el => (this.volumeLevelEl = el);
 
     render() {
-        // Disable slider on Firefox (doesn't work - can't figure out why)
-        if (this.inFirefox) {
-            return (
-                <div className="PlayerControlsButton PlayerVolume">
-                    <button onClick={this.props.toggleVolume}>
-                        {this.props.volume > 0 ? (
-                            <VolumeOnIcon />
-                        ) : (
-                            <VolumeOffIcon />
-                        )}
-                    </button>
-                </div>
-            );
-        }
         const controlStyle = {
             display: this.state.sliderVisible ? "block" : "none",
         };
@@ -75,6 +51,7 @@ class PlayerVolumeButton extends PureComponent {
                         type="range"
                         min="0"
                         max="100"
+                        orient="vertical"
                         onChange={this.handleInput}
                         value={this.props.volume}
                     />
