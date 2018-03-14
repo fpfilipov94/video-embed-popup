@@ -4,10 +4,9 @@ import YouTubePlayer from "youtube-player";
 
 import PlayIcon from "../icons/PlayIcon";
 import PauseIcon from "../icons/PauseIcon";
-import VolumeOnIcon from "../icons/VolumeOnIcon";
-import VolumeOffIcon from "../icons/VolumeOffIcon";
 
 import PlayerProgressBar from "./PlayerProgressBar";
+import PlayerVolumeButton from "./PlayerVolumeButton";
 
 import timeFormatter from "../../../helpers/timeFormatter";
 
@@ -131,6 +130,7 @@ class Player extends Component {
                 case 1:
                     // Show the controls and timer
                     this.playerControls.style.height = "30%";
+                    this.playerControls.style.overflow = "visible";
                     this.timer.style.display = "block";
                     // Update playing state
                     this.setState({ playing: true });
@@ -147,6 +147,7 @@ class Player extends Component {
                 default:
                     // Hide the controls and timer
                     this.playerControls.style.height = "0";
+                    this.playerControls.style.overflow = "hidden";
                     this.timer.style.display = "none";
                     // Clear the update interval
                     clearInterval(this.state.timeInterval);
@@ -182,12 +183,23 @@ class Player extends Component {
         }
     };
 
-    toggleSound = async (e = window.event) => {
+    updateVolume = val => {
+        if (val < 1) {
+            this.player.mute();
+            this.setState({ volume: 0 });
+        } else {
+            this.player.setVolume(val);
+            this.player.unMute();
+            this.setState({ volume: val });
+        }
+    };
+
+    toggleVolume = async (e = window.event) => {
         const muted = await this.player.isMuted();
 
         if (muted) {
-            this.setState({ volume: 100 });
-            this.player.unMute();
+            await this.player.unMute();
+            this.setState({ volume: await this.player.getVolume() });
         } else {
             this.setState({ volume: 0 });
             this.player.mute();
@@ -250,18 +262,16 @@ class Player extends Component {
                     style={interfaceStyle}
                 >
                     <button
-                        className="PlayerButton"
+                        className="PlayerControlsButton PlayerButton"
                         onClick={this.togglePlayBack}
                     >
                         {this.state.playing ? <PauseIcon /> : <PlayIcon />}
                     </button>
-                    <button className="PlayerVolume" onClick={this.toggleSound}>
-                        {this.state.volume > 0 ? (
-                            <VolumeOnIcon />
-                        ) : (
-                            <VolumeOffIcon />
-                        )}
-                    </button>
+                    <PlayerVolumeButton
+                        volume={this.state.volume}
+                        toggleVolume={this.toggleVolume}
+                        updateVolume={this.updateVolume}
+                    />
                     <PlayerProgressBar
                         player={this.player}
                         playing={this.state.playing}

@@ -1,5 +1,6 @@
 @import "../../global/colors";
 @import "./playerProgress";
+@import "./playerVolume";
 
 .Player {
     display: block;
@@ -10,6 +11,10 @@
     width: 100%;
     opacity: 0;
     transition: opacity 500ms ease-in-out;
+
+    &:hover .PlayerControls {
+        opacity: 1;
+    }
 
     iframe {
         margin: 0 auto;
@@ -45,7 +50,11 @@
         transition: opacity 200ms ease-in-out;
         overflow: hidden;
 
-        button {
+        &:hover {
+            opacity: 1;
+        }
+
+        .PlayerControlsButton {
             outline: none;
             border: none;
             display: flex;
