@@ -68,11 +68,12 @@
             cursor: pointer;
         }
 
-        .PlayerButton:hover,
-        .PlayerVolume:hover {
-            svg {
-                fill: rgb(11, 51, 61);
-            }
+        .PlayerButton:hover svg {
+            fill: $color-dark-blue;
+        }
+
+        .PlayerVolume:hover svg {
+            fill: $color-bluish;
         }
 
         .PlayerButton {
