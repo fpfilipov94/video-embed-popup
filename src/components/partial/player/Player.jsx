@@ -17,25 +17,26 @@ import timeFormatter from "../../../helpers/timeFormatter";
 */
 
 class Player extends Component {
-    constructor(props) {
-        super(props);
+    // Cache a static aspect ratio
+    static aspectRatio = 9 / 16;
 
-        this.state = {
-            controlsVisible: false,
-            playing: false,
-            volume: 100,
-            timeInterval: null,
-            percentDone: 0,
-            videoTimeLeft: null,
-            videoDuration: null,
-        };
+    state = {
+        controlsVisible: false,
+        playing: false,
+        volume: 100,
+        timeInterval: null,
+        percentDone: 0,
+        videoTimeLeft: null,
+        videoDuration: null,
+    };
 
-        this.wrapper = null;
-        this.container = null;
-        this.player = null;
-        this.playerControls = null;
-        this.timer = null;
-    }
+    wrapperHeight = null;
+
+    wrapper = null;
+    container = null;
+    player = null;
+    playerControls = null;
+    timer = null;
 
     componentDidMount() {
         // Adjust the wrapper size
@@ -50,33 +51,37 @@ class Player extends Component {
     componentWillUnmount() {
         // Destroy the player instance linked to the container
         this.player.destroy();
+        // Clear resize listeners
+        window.removeEventListener("resize", this.adjustWrapperSize);
+        window.removeEventListener("resize", this.adjustIframeSize);
     }
 
     adjustWrapperSize = () => {
-        // Use the aspect ratio that applies to modern content
-        const aspectRatio = 9 / 16;
+        // Remove listener to avoid overcalling
+        window.removeEventListener("resize", this.adjustWrapperSize);
         // Use the wrapper width to calculate its desired height
         const wrapperWidth = this.wrapper.getBoundingClientRect().width;
-        const properHeight = wrapperWidth * aspectRatio;
+        const properHeight = wrapperWidth * Player.aspectRatio;
+        // Cache the height
+        this.wrapperHeight = properHeight;
         // Set the height in wrapper's style
         this.wrapper.style.height = `${properHeight}px`;
+        // Add resize listener
+        window.addEventListener("resize", this.adjustWrapperSize);
     };
 
-    adjustPlayerSize = async () => {
+    // Call only after player ready and adjustWrapperSize() consecutively
+    adjustIframeSize = async () => {
+        // Remove resize listener to avoid overcalling
+        window.removeEventListener("resize", this.adjustIframeSize);
         // Grab the iframe
         const frame = await this.player.getIframe();
-        // Fix the frame's position (the style gets overriden on init)
-        frame.style.margin = "0 auto";
         // Add a transition
         frame.style.transition = "height 200ms ease-in-out";
-        // Hard code the aspect ratio
-        const aspectRatio = 9 / 16;
-        // Calculate the desired height
-        const wrapperWidth = this.wrapper.getBoundingClientRect().width;
-        const properHeight = wrapperWidth * aspectRatio;
-        // Fit the iframe properly into the wrapper
-        frame.setAttribute("width", wrapperWidth);
-        frame.setAttribute("height", properHeight);
+        // Set frame height to wrapper height
+        frame.setAttribute("height", this.wrapperHeight);
+        // Add resize listener
+        window.addEventListener("resize", this.adjustIframeSize);
     };
 
     createPlayer = () => {
@@ -89,7 +94,6 @@ class Player extends Component {
                 showinfo: 0,
                 controls: 0,
                 rel: 0,
-                playsinline: 1,
                 cc_load_policy: 0,
                 iv_load_policy: 0,
             },
@@ -101,11 +105,11 @@ class Player extends Component {
         this.player.on("ready", async e => {
             // Prevent unpredictable autoplaying
             this.player.stopVideo();
-            // Fix the iframe size
-            this.adjustPlayerSize();
+            // Adjust the iframe size
+            this.adjustIframeSize();
             // Show the wrapper
             this.wrapper.style.opacity = "1";
-            // Cache the video duration and set time left
+            // Cache the video duration and set time left ASAP
             const videoDuration = await this.player.getDuration();
             this.setState({
                 videoDuration,
@@ -117,48 +121,45 @@ class Player extends Component {
             // https://developers.google.com/youtube/iframe_api_reference#Playback_status
             switch (e.data) {
                 case -1:
-                case 0:
+                case 2:
                 case 3:
-                    // Clear the update interval and its in-state reference
+                    // Clear the update interval
                     clearInterval(this.state.timeInterval);
+                    // Update playing state
                     this.setState({ playing: false });
                     break;
                 case 1:
                     // Show the controls and timer
                     this.playerControls.style.height = "30%";
                     this.timer.style.display = "block";
+                    // Update playing state
                     this.setState({ playing: true });
                     // Update the progress bar ASAP
-                    this.calculatePercentDone().then(done =>
-                        this.setState({ percentDone: done })
-                    );
+                    this.refreshPercentDone();
                     // Set an interval to auto-update the progress bar
                     this.setState({
                         timeInterval: setInterval(async () => {
-                            const currentTime = await this.player.getCurrentTime();
-                            this.setState({
-                                percentDone: await this.calculatePercentDone(),
-                                videoTimeLeft: timeFormatter(
-                                    this.state.videoDuration - currentTime
-                                ),
-                            });
+                            this.refreshPercentDone();
+                            this.refreshTimeDifference();
                         }, 1000),
                     });
                     break;
                 default:
-                    // Hide controls to prevent accidental clicking
+                    // Hide the controls and timer
                     this.playerControls.style.height = "0";
-                    // Hide the timer
                     this.timer.style.display = "none";
                     // Clear the update interval
                     clearInterval(this.state.timeInterval);
+                    // Update playing state
                     this.setState({ playing: false });
             }
         });
     };
 
+    // Used to update percent from the progress bar
     updatePercentDone = val => this.setState({ percentDone: val });
 
+    // Used to update time left from the progress bar
     updateTimeLeft = async val =>
         this.setState({
             videoTimeLeft: timeFormatter(this.state.videoDuration - val),
@@ -193,11 +194,19 @@ class Player extends Component {
         }
     };
 
-    calculatePercentDone = async () => {
-        const done = await this.player.getCurrentTime();
-        const total = await this.player.getDuration();
-        const fraction = done / total;
-        return Math.ceil(fraction * 100);
+    refreshTimeDifference = async () => {
+        const currentTime = await this.player.getCurrentTime();
+        this.setState({
+            videoTimeLeft: timeFormatter(
+                this.state.videoDuration - currentTime
+            ),
+        });
+    };
+
+    refreshPercentDone = async () => {
+        const currentTime = await this.player.getCurrentTime();
+        const fraction = currentTime / this.state.videoDuration;
+        this.setState({ percentDone: Math.ceil(fraction * 100) });
     };
 
     showControls = () => this.setState({ controlsVisible: true });
@@ -213,6 +222,9 @@ class Player extends Component {
     refTimer = el => (this.timer = el);
 
     render() {
+        const interfaceStyle = {
+            opacity: this.state.controlsVisible ? "1" : "0",
+        };
         return (
             <span
                 className="Player"
@@ -228,18 +240,14 @@ class Player extends Component {
                 <div
                     className="PlayerTimeLeft"
                     ref={this.refTimer}
-                    style={{
-                        opacity: this.state.controlsVisible ? "1" : "0",
-                    }}
+                    style={interfaceStyle}
                 >
                     -{this.state.videoTimeLeft}
                 </div>
                 <section
                     className="PlayerControls"
                     ref={this.refPlayerControls}
-                    style={{
-                        opacity: this.state.controlsVisible ? "1" : "0",
-                    }}
+                    style={interfaceStyle}
                 >
                     <button
                         className="PlayerButton"

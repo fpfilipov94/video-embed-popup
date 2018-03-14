@@ -1,21 +1,9 @@
 import React, { Component } from "react";
 
 class ProgressBar extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = { videoDuration: null };
-
-        this.progressDone = null;
-    }
+    progressDone = null;
 
     async componentWillReceiveProps(nextProps) {
-        // Cache the video duration for later calculations
-        if (!this.state.videoDuration) {
-            this.setState({
-                videoDuration: await nextProps.player.getDuration(),
-            });
-        }
         // Increment the value for better cursor positioning
         const adjustedPercent = nextProps.percentValue + 1;
         this.progressDone.style.width = adjustedPercent + "%";
@@ -27,7 +15,7 @@ class ProgressBar extends Component {
         const fixedPercentValue = Number.parseInt(e.target.value, 10);
         const fraction = fixedPercentValue / 100;
 
-        const targetSeconds = fraction * this.state.videoDuration;
+        const targetSeconds = fraction * this.props.videoDuration;
 
         this.props.player.seekTo(targetSeconds);
         this.props.updatePercentDone(fixedPercentValue);

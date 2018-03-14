@@ -16,10 +16,12 @@ const persistConfig = {
     storage,
 };
 
+// Create a persistent reducer
 const persistedReducer = persistReducer(persistConfig, popupApp);
 
 let store;
 if (process.env.NODE_ENV === "development") {
+    // Expose store for debugging in development
     /* eslint-disable no-underscore-dangle */
     store = createStore(
         persistedReducer,
@@ -31,6 +33,8 @@ if (process.env.NODE_ENV === "development") {
     store = createStore(persistedReducer);
 }
 
+// Create a persistor for the PersistGate
+// Needed to delay rendering until after store rehydration
 const persistor = persistStore(store);
 
 ReactDOM.render(

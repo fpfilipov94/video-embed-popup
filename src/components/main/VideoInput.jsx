@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 
 import { setVideoId } from "../../store/actions/index";
 
-class VideoInput extends Component {
+class VideoInput extends PureComponent {
     handleInput = (event = window.event) => {
         const validFullUrl = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com)\/watch\?v=(.+)$/;
         const validShortUrl = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.?be)\/(.+)$/;

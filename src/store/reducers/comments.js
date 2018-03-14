@@ -13,7 +13,7 @@ const comments = (state = [], action) => {
                 ...state,
                 {
                     user: action.user,
-                    id: action.id,
+                    id: state.length === 0 ? 0 : state[state.length - 1].id + 1,
                     text: action.text,
                     date: action.date,
                     subComments: { lastId: -1, list: [] },

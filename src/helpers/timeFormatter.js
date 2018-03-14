@@ -1,7 +1,7 @@
 export default totalSeconds => {
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor(((totalSeconds % 86400) % 3600) / 60);
-    const seconds = Math.round(((totalSeconds % 86400) % 3600) % 60);
+    const seconds = Math.floor(((totalSeconds % 86400) % 3600) % 60);
 
     let displayHours = hours.toString();
     let displayMinutes = minutes.toString();

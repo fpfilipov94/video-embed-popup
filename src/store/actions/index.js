@@ -9,12 +9,9 @@ import {
 
 import MockUser from "../../helpers/userMocker";
 
-let nextCommentId = 0;
-
 export const addComment = text => ({
     type: ADD_COMMENT,
     user: MockUser,
-    id: nextCommentId++,
     date: new Date(),
     text,
 });

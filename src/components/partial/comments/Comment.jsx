@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
 import LikeIcon from "../icons/LikeIcon";
 import ShareIcon from "../icons/ShareIcon";
@@ -9,16 +9,10 @@ import AddSubComment from "./AddSubComment";
 
 import dateFormatter from "../../../helpers/dateFormatter";
 
-class Comment extends Component {
-    constructor(props) {
-        super(props);
+class Comment extends PureComponent {
+    state = { addSubCommentVisible: false };
 
-        this.state = { addSubCommentVisible: false };
-    }
-
-    showAddSubComment = () => {
-        this.setState({ addSubCommentVisible: true });
-    };
+    showAddSubComment = () => this.setState({ addSubCommentVisible: true });
 
     // Abstract the render logic away here for reuse as a subcomment
     renderComment = (comment, isMain) => {

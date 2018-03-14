@@ -1,18 +1,12 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 
 import { addComment, addSubComment } from "../../../store/actions/index";
 
-class AddComment extends Component {
-    constructor(props) {
-        super(props);
+class AddComment extends PureComponent {
+    state = { commentText: "" };
 
-        this.state = {
-            commentText: "",
-        };
-
-        this.textarea = null;
-    }
+    textarea = null;
 
     resizeTextArea = () => {
         this.textarea.style.height = "auto";
@@ -21,19 +15,17 @@ class AddComment extends Component {
 
     handleInput = e => {
         this.resizeTextArea();
-        this.setState({
-            commentText: e.target.value,
-        });
+        this.setState({ commentText: e.target.value });
     };
 
     handleSubmit = e => {
         if (!e.shiftKey && e.which === 13) {
             // Prevent adding an empty line
             e.preventDefault();
-
             // Save the comment here and clear the textarea
             const retrievedText = this.state.commentText;
-
+            this.setState({ commentText: "" });
+            // Decide (by type) where to submit the comment
             if (this.props.target === "all") {
                 // handle comments
                 this.props.dispatch(addComment(retrievedText));
@@ -43,9 +35,6 @@ class AddComment extends Component {
                     addSubComment(this.props.target, retrievedText)
                 );
             }
-
-            this.setState({ commentText: "" });
-
             // Shrink the textarea back to normal
             this.textarea.style.height = "auto";
         }
@@ -69,6 +58,4 @@ class AddComment extends Component {
     }
 }
 
-AddComment = connect()(AddComment);
-
-export default AddComment;
+export default connect()(AddComment);
